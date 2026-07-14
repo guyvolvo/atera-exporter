@@ -94,14 +94,14 @@ func (a Agent) Hostname() string {
 	return clean(a.AgentName)
 }
 
-// OSName is the human OS string. Do not use OSType for this — it holds the device
+// OSName is the human OS string. Do not use OSType for this - it holds the device
 // class ("Work Station"), not the operating system.
 func (a Agent) OSName() string {
 	return clean(a.OS)
 }
 
 // Folder names the grouping bucket. Agents frequently have no folder set, and
-// Prometheus treats an empty label value as absent — which would drop them out of
+// Prometheus treats an empty label value as absent - which would drop them out of
 // `sum by (folder)` entirely rather than showing them as their own group.
 func (a Agent) Folder() string {
 	if f := clean(a.FolderName); f != "" {

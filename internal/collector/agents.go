@@ -100,7 +100,7 @@ func (a *Agents) Refresh(ctx context.Context) error {
 		return err
 	}
 
-	// Prometheus rejects the entire scrape on any duplicate label set — a single
+	// Prometheus rejects the entire scrape on any duplicate label set - a single
 	// duplicate blanks /metrics with a 500 rather than degrading one series. Atera
 	// duplicates both of these in practice: repeated AgentIDs, and the same volume
 	// listed two or three times in HardwareDisks.

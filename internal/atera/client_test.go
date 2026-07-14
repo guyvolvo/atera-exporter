@@ -78,7 +78,7 @@ func TestRateLimitIsRetriedAndRetryAfterHonoured(t *testing.T) {
 	}
 }
 
-// A transient 500 must not fail the poll outright — Atera has bad minutes.
+// A transient 500 must not fail the poll outright - Atera has bad minutes.
 func TestServerErrorIsRetried(t *testing.T) {
 	var calls atomic.Int32
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -156,7 +156,7 @@ func TestCountTransfersNoItems(t *testing.T) {
 		t.Fatalf("count = %d, want 12000", n)
 	}
 	if gotItemsInPage != "1" {
-		t.Fatalf("itemsInPage=%q, want \"1\" — a count must not transfer items", gotItemsInPage)
+		t.Fatalf("itemsInPage=%q, want \"1\" - a count must not transfer items", gotItemsInPage)
 	}
 }
 

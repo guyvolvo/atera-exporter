@@ -142,7 +142,7 @@ func TestClosedTicketsAreCountedNotWalked(t *testing.T) {
 
 	for _, status := range []string{"Resolved", "Closed", "Deleted"} {
 		if fake.walked(status) {
-			t.Fatalf("%s was walked — the corpus must only ever be counted", status)
+			t.Fatalf("%s was walked - the corpus must only ever be counted", status)
 		}
 	}
 	if !fake.walked("Open") {
@@ -257,7 +257,7 @@ func TestOldestOpenTicketWins(t *testing.T) {
 }
 
 // gaugeValue reads a single unlabelled gauge out of a collector that emits many.
-// testutil.ToFloat64 cannot be used here — it panics unless the collector yields
+// testutil.ToFloat64 cannot be used here - it panics unless the collector yields
 // exactly one metric.
 func gaugeValue(t *testing.T, c prometheus.Collector, name string) float64 {
 	t.Helper()

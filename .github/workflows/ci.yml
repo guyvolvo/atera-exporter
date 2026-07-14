@@ -47,7 +47,7 @@ jobs:
           govulncheck ./...
 
   # Build the image on every PR so a broken Dockerfile fails here rather than at
-  # release time. No push — that only happens on a tag.
+  # release time. No push - that only happens on a tag.
   image:
     runs-on: ubuntu-latest
     steps:

@@ -14,7 +14,7 @@ import (
 //
 // It never walks the ticket corpus. A mature tenant holds tens of thousands of
 // tickets and the API caps itemsInPage at 50, so a full walk runs to over a
-// thousand requests and takes minutes — it would time out on every cycle. Instead:
+// thousand requests and takes minutes - it would time out on every cycle. Instead:
 //
 //   - Counts come from totalItemCount on a filtered, itemsInPage=1 request. One
 //     request per status, zero tickets transferred.

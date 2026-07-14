@@ -31,7 +31,7 @@ type Config struct {
 
 	// TicketStatuses are counted via totalItemCount (one cheap request each).
 	// TicketLiveStatuses are additionally fetched in full for age and priority
-	// detail — keep this to statuses that represent live work. Fetching Resolved
+	// detail - keep this to statuses that represent live work. Fetching Resolved
 	// would mean walking 30k tickets that will never change again.
 	TicketStatuses     []string
 	TicketLiveStatuses []string

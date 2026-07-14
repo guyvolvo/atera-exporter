@@ -175,7 +175,7 @@ func TestDuplicateMachineIDDoesNotBreakScrape(t *testing.T) {
 
 // Atera reports Memory and HardwareDisks in mebibytes. Publishing those numbers
 // raw under a _bytes name would be wrong by a factor of ~1e6 and nothing would
-// complain — the graph would just quietly lie.
+// complain - the graph would just quietly lie.
 func TestSizesAreConvertedToBytes(t *testing.T) {
 	ag := agent(1, "PC1", "Workstations", true)
 	ag["Memory"] = 32411
@@ -213,7 +213,7 @@ atera_agent_memory_bytes{agent_id="1"} %d
 
 // Atera lists the same volume two or three times in HardwareDisks for some
 // agents. A duplicate label set makes Prometheus reject the whole scrape with a
-// 500 — not just that series — so /metrics returns nothing at all.
+// 500 - not just that series - so /metrics returns nothing at all.
 func TestDuplicateDrivesDoNotBreakScrape(t *testing.T) {
 	ag := agent(2089, "PC-2089", "Workstations", true)
 	ag["HardwareDisks"] = []map[string]any{

@@ -238,7 +238,7 @@ func (c *Client) TicketCountAll(ctx context.Context) (int, error) {
 }
 
 // TicketsByStatus walks every ticket in one status. Only call this for statuses
-// that represent live work — the closed-and-resolved corpus is tens of thousands
+// that represent live work - the closed-and-resolved corpus is tens of thousands
 // of rows that will never change again.
 func (c *Client) TicketsByStatus(ctx context.Context, status string) ([]Ticket, error) {
 	return list[Ticket](ctx, c, "/tickets", url.Values{"ticketStatus": {status}})

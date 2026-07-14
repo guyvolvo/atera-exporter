@@ -67,7 +67,7 @@
   "time": { "from": "now-24h", "to": "now" },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Atera — Fleet",
+  "title": "Atera - Fleet",
   "uid": "atera-fleet",
   "version": 1,
   "weekStart": "",
@@ -249,7 +249,7 @@
 
     {
       "datasource": { "type": "prometheus", "uid": "${datasource}" },
-      "description": "Non-archived alerts. Archived alerts are excluded by the exporter — counting them would leave this permanently red.",
+      "description": "Non-archived alerts. Archived alerts are excluded by the exporter - counting them would leave this permanently red.",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -515,7 +515,7 @@
 
     {
       "datasource": { "type": "prometheus", "uid": "${datasource}" },
-      "description": "One series — the title names it, so no legend box is needed.",
+      "description": "One series - the title names it, so no legend box is needed.",
       "fieldConfig": {
         "defaults": {
           "color": { "fixedColor": "green", "mode": "fixed" },
@@ -753,7 +753,7 @@
 
     {
       "datasource": { "type": "prometheus", "uid": "${datasource}" },
-      "description": "The 20 fullest volumes. Hundreds of lines on a timeseries would be unreadable — the question is which machines are about to fill up, which is a sorted list.",
+      "description": "The 20 fullest volumes. Hundreds of lines on a timeseries would be unreadable - the question is which machines are about to fill up, which is a sorted list.",
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -982,7 +982,7 @@
 
     {
       "datasource": { "type": "prometheus", "uid": "${datasource}" },
-      "description": "Who is sitting on open work. One series per technician, so the bar length is the whole story — no colour ramp on top of it.",
+      "description": "Who is sitting on open work. One series per technician, so the bar length is the whole story - no colour ramp on top of it.",
       "fieldConfig": {
         "defaults": {
           "color": { "fixedColor": "blue", "mode": "fixed" },
@@ -1030,7 +1030,7 @@
       "panels": [
         {
           "datasource": { "type": "prometheus", "uid": "${datasource}" },
-          "description": "Per-domain polling health. If the exporter process itself dies these series vanish entirely — alert on up{job=\"atera\"} for that case.",
+          "description": "Per-domain polling health. If the exporter process itself dies these series vanish entirely - alert on up{job=\"atera\"} for that case.",
           "fieldConfig": {
             "defaults": {
               "color": { "mode": "thresholds" },

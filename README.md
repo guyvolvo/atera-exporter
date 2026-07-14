@@ -31,13 +31,13 @@ curl -s localhost:9199/metrics | grep atera_agents_total
 `IMAGE_TAG=0.1.1 docker compose up -d` rather than riding `latest`, so a restart
 cannot silently swap the binary underneath you.
 
-The key goes in `.env`, never on the command line — `-e ATERA_API_KEY=...` would
+The key goes in `.env`, never on the command line - `-e ATERA_API_KEY=...` would
 leave the JWT in your shell history and in `docker inspect` output permanently.
 
 Binding to `127.0.0.1` means `/metrics` never reaches the network, so it needs no
 firewall rule and no auth in front of it, and Prometheus scrapes it from the same
 host. If Prometheus runs elsewhere, bind to a routable address and restrict it at
-the firewall — the endpoint exposes your full device inventory.
+the firewall - the endpoint exposes your full device inventory.
 
 ## API version and auth
 
@@ -83,9 +83,9 @@ your Prometheus datasource.
 
 | Variable | Default | Notes |
 |---|---|---|
-| `ATERA_API_KEY` | — | Required. |
+| `ATERA_API_KEY` | - | Required. |
 | `ATERA_BASE_URL` | `https://app.atera.com/api/v3` | |
-| `LISTEN_ADDR` | `:9199` | Not 9100 — that is node_exporter. |
+| `LISTEN_ADDR` | `:9199` | Not 9100 - that is node_exporter. |
 | `ATERA_RPS` | `3` | Request budget shared across all domains. |
 | `ATERA_BURST` | `5` | |
 | `POLL_TIMEOUT` | `4m` | Must exceed pages ÷ `ATERA_RPS` for your fleet size. |
@@ -112,7 +112,7 @@ query time, so a hostname or OS change does not churn series everywhere:
 atera_agent_online * on(agent_id) group_left(hostname,folder,os) atera_agent_info
 ```
 
-Percent of the fleet online — the reason this exists. It is a query, not exporter
+Percent of the fleet online - the reason this exists. It is a query, not exporter
 code:
 
 ```promql
@@ -126,15 +126,15 @@ bucket; folders are the grouping that means something. MSPs can group by the
 `customer` label on `atera_agent_info` instead. Agents with no folder report
 `folder="unassigned"` rather than an empty label, which Prometheus treats as absent.
 
-**Fleet** — `atera_agent_info`, `atera_agent_online`, `atera_agents_total`,
+**Fleet** - `atera_agent_info`, `atera_agent_online`, `atera_agents_total`,
 `atera_agent_last_seen_timestamp_seconds`, `atera_agent_last_reboot_timestamp_seconds`,
 `atera_agent_memory_bytes`, `atera_agent_disk_total_bytes`, `atera_agent_disk_free_bytes`.
 
-**Alerts** — `atera_alerts`, `atera_oldest_alert_timestamp_seconds`. Archived alerts
+**Alerts** - `atera_alerts`, `atera_oldest_alert_timestamp_seconds`. Archived alerts
 are excluded: Atera's `/alerts` returns the full history, and counting archived
 alerts as open gives a permanently red dashboard that never clears.
 
-**Tickets** — `atera_tickets` (per status), `atera_tickets_total` (unfiltered),
+**Tickets** - `atera_tickets` (per status), `atera_tickets_total` (unfiltered),
 `atera_open_tickets` (per priority), `atera_open_tickets_by_technician`,
 `atera_oldest_open_ticket_timestamp_seconds`.
 
@@ -145,12 +145,12 @@ express surface as a gap instead of vanishing:
 atera_tickets_total - sum(atera_tickets)
 ```
 
-**Polling health** — `atera_up`, `atera_poll_errors_total`,
+**Polling health** - `atera_up`, `atera_poll_errors_total`,
 `atera_poll_duration_seconds`, `atera_last_success_timestamp_seconds`,
 `atera_api_requests_total`.
 
 Watch `atera_api_requests_total{code="429"}`. If it moves off zero, Atera is rate
-limiting you — lower `ATERA_RPS`.
+limiting you - lower `ATERA_RPS`.
 
 ## Not exported
 

@@ -50,7 +50,7 @@ func newTestAlerts(t *testing.T, srvURL string) *Alerts {
 
 // Atera's /alerts returns the full history, most of it archived. Counting
 // archived alerts as open would show a permanently red dashboard that never
-// clears — the alert panel would be useless within a week.
+// clears - the alert panel would be useless within a week.
 func TestArchivedAlertsAreExcluded(t *testing.T) {
 	now := time.Now()
 	srv := httptest.NewServer(alertsHandler([]map[string]any{
