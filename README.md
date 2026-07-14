@@ -20,8 +20,7 @@ cd atera-exporter
 
 cp .env.example .env
 $EDITOR .env          # set ATERA_API_KEY
-chmod 600 .env        # the key is read access to your entire RMM
-
+chmod 600 .env
 docker compose up -d --build
 curl -s localhost:9199/metrics | grep atera_agents_total
 ```
@@ -31,13 +30,9 @@ curl -s localhost:9199/metrics | grep atera_agents_total
 `IMAGE_TAG=0.1.1 docker compose up -d` rather than riding `latest`, so a restart
 cannot silently swap the binary underneath you.
 
-The key goes in `.env`, never on the command line - `-e ATERA_API_KEY=...` would
-leave the JWT in your shell history and in `docker inspect` output permanently.
-
-Binding to `127.0.0.1` means `/metrics` never reaches the network, so it needs no
-firewall rule and no auth in front of it, and Prometheus scrapes it from the same
-host. If Prometheus runs elsewhere, bind to a routable address and restrict it at
-the firewall - the endpoint exposes your full device inventory.
+Binding to `127.0.0.1` means `/metrics` never reaches the network, so it technically needs no
+firewall rules, and Prometheus scrapes it from the same
+host. If Prometheus runs elsewhere, bind to a routable address and restrict it via the firewall.
 
 ## API version and auth
 
