@@ -75,6 +75,8 @@ target is UP under **Status > Targets**.
 ## Dashboard
 
 The exporter comes with a handy pre-built Grafana dashboard :)
+
+![Atera fleet dashboard](docs/grafana.png)
  
 Import [`deploy/grafana/atera-fleet.json`](deploy/grafana/atera-fleet.json) and pick
 your Prometheus datasource.
