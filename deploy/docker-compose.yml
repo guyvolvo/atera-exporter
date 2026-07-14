@@ -1,0 +1,40 @@
+# The exporter only. Prometheus, Alertmanager and Grafana already run as systemd
+# services on this host — bundling our own would double-bind 9090/3000 and split
+# the dashboards in two.
+services:
+  atera-exporter:
+    image: ghcr.io/guyvolvo/atera-exporter:${IMAGE_TAG:-latest}
+    container_name: atera-exporter
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POLL_INTERVAL_AGENTS: 5m
+      POLL_INTERVAL_ALERTS: 1m
+      POLL_INTERVAL_TICKETS: 2m
+      # Conservative against Atera's rate limit. Raise only after confirming
+      # atera_api_requests_total{code="429"} stays at zero.
+      ATERA_RPS: "3"
+
+    # Loopback only. Prometheus scrapes from this same host, so /metrics never
+    # reaches the LAN and needs no authentication in front of it.
+    ports:
+      - "127.0.0.1:9199:9199"
+
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+    healthcheck:
+      # No shell or curl in the distroless image, so probe via the binary itself.
+      test: ["CMD", "/atera-exporter", "-healthcheck"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
