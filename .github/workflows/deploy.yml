@@ -1,0 +1,40 @@
+name: deploy
+
+# Deployment is an explicit, gated step rather than Watchtower auto-pulling
+# :latest. Auto-pull means a bad build promotes itself to production at 03:00
+# with nobody watching.
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Image tag to deploy
+        required: true
+        default: latest
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd /opt/atera-exporter
+            export IMAGE_TAG='${{ inputs.tag }}'
+            docker compose pull
+            docker compose up -d
+            docker compose ps
+            # Fail the deploy if the new container is not actually serving.
+            sleep 5
+            curl -fsS http://127.0.0.1:9199/healthz
