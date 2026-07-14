@@ -102,7 +102,7 @@ func (c *Client) do(ctx context.Context, endpoint string, target any) error {
 		switch {
 		case resp.StatusCode == http.StatusOK:
 			err := json.NewDecoder(resp.Body).Decode(target)
-			resp.Body.Close()
+			_ = resp.Body.Close()
 			if err != nil {
 				return fmt.Errorf("decode %s: %w", endpoint, err)
 			}
@@ -120,7 +120,7 @@ func (c *Client) do(ctx context.Context, endpoint string, target any) error {
 
 		default:
 			body, _ := io.ReadAll(io.LimitReader(resp.Body, 512))
-			resp.Body.Close()
+			_ = resp.Body.Close()
 			return fmt.Errorf("%s: status %d: %s", endpoint, resp.StatusCode, body)
 		}
 	}
@@ -163,8 +163,8 @@ func parseRetryAfter(v string) time.Duration {
 }
 
 func drain(body io.ReadCloser) {
-	io.Copy(io.Discard, io.LimitReader(body, 4096))
-	body.Close()
+	_, _ = io.Copy(io.Discard, io.LimitReader(body, 4096))
+	_ = body.Close()
 }
 
 // list walks every page of a paginated endpoint and returns the flattened

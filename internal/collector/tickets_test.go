@@ -70,7 +70,7 @@ func (f *fakeTickets) handler() http.Handler {
 			totalPages = (total + itemsInPage - 1) / itemsInPage
 		}
 
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"items":          items,
 			"page":           page,
 			"itemsInPage":    len(items),

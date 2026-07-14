@@ -45,7 +45,7 @@ func (f *fakeAtera) handler() http.Handler {
 			items = f.agents[start:end]
 		}
 
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"items":          items,
 			"page":           page,
 			"itemsInPage":    len(items),
@@ -249,7 +249,7 @@ func TestDuplicateDrivesDoNotBreakScrape(t *testing.T) {
 // every equality match in PromQL.
 func TestBidiMarksStrippedFromLabels(t *testing.T) {
 	ag := agent(1, "PC1", "Epstein-Computers", true)
-	ag["OS"] = "‏‏Microsoft Windows 11 Pro  x64"
+	ag["OS"] = "\u200F\u200FMicrosoft Windows 11 Pro  x64"
 
 	fake := &fakeAtera{agents: []map[string]any{ag}}
 	srv := httptest.NewServer(fake.handler())

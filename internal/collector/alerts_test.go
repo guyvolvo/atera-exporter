@@ -16,7 +16,7 @@ import (
 
 func alertsHandler(alerts []map[string]any) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"items":          alerts,
 			"page":           1,
 			"itemsInPage":    len(alerts),

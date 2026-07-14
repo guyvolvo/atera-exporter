@@ -50,7 +50,7 @@ func TestRateLimitIsRetriedAndRetryAfterHonoured(t *testing.T) {
 			w.WriteHeader(http.StatusTooManyRequests)
 			return
 		}
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"items":          []map[string]any{{"AgentID": 1, "MachineName": "PC1"}},
 			"page":           1,
 			"itemsInPage":    1,
@@ -86,7 +86,7 @@ func TestServerErrorIsRetried(t *testing.T) {
 			http.Error(w, "boom", http.StatusInternalServerError)
 			return
 		}
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"items":          []map[string]any{{"AgentID": 7}},
 			"page":           1,
 			"itemsInPage":    1,
@@ -112,7 +112,7 @@ func TestListStopsAtTotalPages(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		calls.Add(1)
 		page, _ := strconv.Atoi(r.URL.Query().Get("page"))
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"items":          []map[string]any{{"AgentID": page}},
 			"page":           page,
 			"itemsInPage":    1,
@@ -140,7 +140,7 @@ func TestCountTransfersNoItems(t *testing.T) {
 	var gotItemsInPage string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		gotItemsInPage = r.URL.Query().Get("itemsInPage")
-		json.NewEncoder(w).Encode(map[string]any{
+		_ = json.NewEncoder(w).Encode(map[string]any{
 			"items":          []map[string]any{},
 			"totalItemCount": 30535,
 			"totalPages":     30535,
@@ -187,7 +187,7 @@ func TestTolerantTimeParsing(t *testing.T) {
 // Hebrew-locale tenants embed bidi marks in strings. They are invisible, so a
 // label carrying them looks right while never matching in PromQL.
 func TestCleanStripsBidiMarks(t *testing.T) {
-	got := clean("‏‏Microsoft Windows 11 Pro  x64")
+	got := clean("\u200F\u200FMicrosoft Windows 11 Pro  x64")
 	want := "Microsoft Windows 11 Pro x64"
 	if got != want {
 		t.Fatalf("clean() = %q, want %q", got, want)
