@@ -14,9 +14,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Pinned to a patch release, not the "1.25" alias: the alias resolved to
+      # 1.25.11, which carries GO-2026-5856 in crypto/tls. check-latest picks up
+      # future patches without another commit here.
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.25"
+          go-version: "1.25.12"
+          check-latest: true
           cache: true
 
       - name: Verify formatting

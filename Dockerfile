@@ -1,7 +1,10 @@
 # TARGETOS/TARGETARCH are supplied by buildx. Hardcoding amd64 here would make
 # the multi-arch build in release.yml silently produce amd64 binaries inside
 # arm64 images.
-FROM --platform=$BUILDPLATFORM golang:1.25-alpine AS build
+# Pinned to a patch release. The floating golang:1.25-alpine tag can lag behind a
+# stdlib security fix — 1.25.11 shipped GO-2026-5856 in crypto/tls, which is in the
+# path here because the exporter talks TLS to the Atera API.
+FROM --platform=$BUILDPLATFORM golang:1.25.12-alpine AS build
 ARG TARGETOS
 ARG TARGETARCH
 ARG VERSION=dev
