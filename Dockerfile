@@ -1,12 +1,12 @@
-# TARGETOS/TARGETARCH are supplied by buildx. Hardcoding amd64 here would make
-# the multi-arch build in release.yml silently produce amd64 binaries inside
-# arm64 images.
-# Pinned to a patch release. The floating golang:1.25-alpine tag can lag behind a
-# stdlib security fix — 1.25.11 shipped GO-2026-5856 in crypto/tls, which is in the
-# path here because the exporter talks TLS to the Atera API.
-FROM --platform=$BUILDPLATFORM golang:1.25.12-alpine AS build
-ARG TARGETOS
-ARG TARGETARCH
+# BUILDPLATFORM/TARGETOS/TARGETARCH are set by buildx. The defaults keep this
+# buildable by the classic docker builder too, where they are undefined.
+#
+# Go version is pinned to a patch release: the floating 1.25-alpine tag can lag a
+# stdlib security fix, and 1.25.11 shipped GO-2026-5856 in crypto/tls, which is in
+# the path here because the exporter talks TLS to the Atera API.
+FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:1.25.12-alpine AS build
+ARG TARGETOS=linux
+ARG TARGETARCH=amd64
 ARG VERSION=dev
 
 WORKDIR /src
@@ -14,14 +14,12 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
+RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH:-amd64} \
     go build -trimpath -ldflags "-w -s -X main.version=$VERSION" \
     -o /out/atera-exporter ./cmd/atera-exporter
 
 FROM gcr.io/distroless/static:nonroot
 
-# Links the GHCR package to the repo, so the package page shows the README and
-# inherits provenance instead of being an orphan.
 LABEL org.opencontainers.image.source="https://github.com/guyvolvo/atera-exporter"
 LABEL org.opencontainers.image.description="Prometheus exporter for the Atera RMM API"
 
