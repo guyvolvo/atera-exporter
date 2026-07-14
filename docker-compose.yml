@@ -1,11 +1,18 @@
-# The exporter only. Prometheus, Alertmanager and Grafana already run as systemd
-# services on this host — bundling our own would double-bind 9090/3000 and split
-# the dashboards in two.
+# Two ways to run this, same file:
+#   docker compose up -d           pulls the published image
+#   docker compose up -d --build   builds from this checkout instead
+#
+# No bundled Prometheus or Grafana — point your existing stack at :9199.
 services:
   atera-exporter:
     image: ghcr.io/guyvolvo/atera-exporter:${IMAGE_TAG:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: atera-exporter
     restart: unless-stopped
+
+    # The key lives in .env (chmod 600), never in this file and never in the image.
     env_file: .env
     environment:
       POLL_INTERVAL_AGENTS: 5m
@@ -15,8 +22,8 @@ services:
       # atera_api_requests_total{code="429"} stays at zero.
       ATERA_RPS: "3"
 
-    # Loopback only. Prometheus scrapes from this same host, so /metrics never
-    # reaches the LAN and needs no authentication in front of it.
+    # Loopback only. Prometheus scrapes from this same host, so /metrics — which
+    # exposes the whole device inventory — never reaches the LAN and needs no auth.
     ports:
       - "127.0.0.1:9199:9199"
 
@@ -33,7 +40,7 @@ services:
         max-file: "3"
 
     healthcheck:
-      # No shell or curl in the distroless image, so probe via the binary itself.
+      # No shell or curl in the distroless image, so it probes itself.
       test: ["CMD", "/atera-exporter", "-healthcheck"]
       interval: 30s
       timeout: 5s

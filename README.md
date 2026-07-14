@@ -13,24 +13,31 @@ scrape is a memory read. Scrape interval and poll interval are therefore
 independent.
 
 ## Quick start
-### Docker run
+
+```bash
+git clone https://github.com/guyvolvo/atera-exporter.git
+cd atera-exporter
+
+cp .env.example .env
+$EDITOR .env          # set ATERA_API_KEY
+chmod 600 .env        # the key is read access to your entire RMM
+
+docker compose up -d --build
+curl -s localhost:9199/metrics | grep atera_agents_total
 ```
-docker run -d --name atera-exporter \
-  -e ATERA_API_KEY=your-key-here \
-  -p 127.0.0.1:9199:9199 \
-  ghcr.io/guyvolvo/atera-exporter:latest
-```
-Test : 
-`curl -s localhost:9199/metrics | grep atera_agents_total`
-### Docker compose 
-A ready-made compose file is in [`deploy/docker-compose.yml`](deploy/docker-compose.yml).
-**Or**
-create a `docker-compose.yml` and an adjacent `.env`
-holding `ATERA_API_KEY`
+
+`--build` compiles from this checkout. Drop it to pull the published image
+(`ghcr.io/guyvolvo/atera-exporter`) instead; pin a version with
+`IMAGE_TAG=0.1.1 docker compose up -d` rather than riding `latest`, so a restart
+cannot silently swap the binary underneath you.
+
+The key goes in `.env`, never on the command line — `-e ATERA_API_KEY=...` would
+leave the JWT in your shell history and in `docker inspect` output permanently.
 
 Binding to `127.0.0.1` means `/metrics` never reaches the network, so it needs no
-firewall rule and no auth in front of it. If Prometheus runs on a *different* host,
-bind to a routable address and restrict it via the firewall
+firewall rule and no auth in front of it, and Prometheus scrapes it from the same
+host. If Prometheus runs elsewhere, bind to a routable address and restrict it at
+the firewall — the endpoint exposes your full device inventory.
 
 ## API version and auth
 
